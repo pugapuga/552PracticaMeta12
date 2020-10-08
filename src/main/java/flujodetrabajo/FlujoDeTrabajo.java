@@ -18,7 +18,7 @@ public class FlujoDeTrabajo {
 
 	public String getNombre() {
 		return nombre;
-	}
+	} //COmentario
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
