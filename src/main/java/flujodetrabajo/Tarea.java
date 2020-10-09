@@ -7,9 +7,10 @@ public class Tarea {
 	private Fase fase;
 	private FlujoDeTrabajo flujoDeTrabajo;
 
-	public Tarea(String nombre, Actividad actividad, Fase fase) {
+	public Tarea(String nombre, Actividad actividad, Fase fase, FlujoDeTrabajo flujoDeTrabajo) {
 		this.nombre = nombre;
 		this.actividad = actividad;
+		this.flujoDeTrabajo = flujoDeTrabajo;
 		this.fase = fase;
 	}
 

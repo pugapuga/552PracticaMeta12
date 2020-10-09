@@ -9,11 +9,11 @@ public class FlujoDeTrabajo {
 	private ArrayList<Actividad> actividades;
 	private ArrayList<Tarea> tareas;
 
-	public FlujoDeTrabajo(String nombre, ArrayList<Fase> fases, ArrayList<Actividad> actividades, ArrayList<Tarea> tareas) {
+	public FlujoDeTrabajo(String nombre) {
 		this.nombre = nombre;
-		this.fases = fases;
-		this.actividades = actividades;
-		this.tareas = tareas;
+		this.fases = fases = new ArrayList<Fase>();
+		this.actividades = new ArrayList<Actividad>();
+		this.tareas = new ArrayList<Tarea>();
 	}
 
 	public String getNombre() {

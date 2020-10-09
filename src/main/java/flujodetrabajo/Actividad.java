@@ -8,10 +8,10 @@ public class Actividad {
 	private FlujoDeTrabajo flujoDeTrabajo;
 	private ArrayList<Tarea> tareas;
 
-	public Actividad(String nombre, FlujoDeTrabajo flujoDeTrabajo, ArrayList<Tarea> tareas) {
+	public Actividad(String nombre, FlujoDeTrabajo flujoDeTrabajo) {
 		this.nombre = nombre;
 		this.flujoDeTrabajo = flujoDeTrabajo;
-		this.tareas = tareas;
+		this.tareas = new ArrayList<Tarea>();
 	}
 
 	public String getNombre() {
@@ -43,15 +43,5 @@ public class Actividad {
 		return "Actividad{" +
 				"nombre='" + nombre + '\'' +
 				'}';
-	}
-
-	/**
-	 * 
-	 * @param nombre
-	 * @param flujoDeTrabajo
-	 */
-	public Actividad(String nombre, FlujoDeTrabajo flujoDeTrabajo) {
-		// TODO - implement Actividad.Actividad
-		throw new UnsupportedOperationException();
 	}
 }

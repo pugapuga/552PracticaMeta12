@@ -8,10 +8,10 @@ public class Fase {
 	private FlujoDeTrabajo flujoDeTrabajo;
 	private ArrayList<Tarea> tareas;
 
-	public Fase(String nombre, FlujoDeTrabajo flujoDeTrabajo, ArrayList<Tarea> tareas) {
+	public Fase(String nombre, FlujoDeTrabajo flujoDeTrabajo) {
 		this.nombre = nombre;
 		this.flujoDeTrabajo = flujoDeTrabajo;
-		this.tareas = tareas;
+		this.tareas = new ArrayList<Tarea>();
 	}
 
 	public String getNombre() {
