@@ -14,19 +14,29 @@ import java.awt.event.*;
 public class TableroGUI extends JDialog {
     private FlujoDeTrabajo flujoDeTrabajo;
     private JPanel contentPane;
+    private JPanel panelPrincipal;
+    private JPanel panelBotones;
+    private JPanel panelSecundario;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JButton buttonTest;
-    private JButton buttonCrearFDT;
     private JButton buttonAgregarFase;
     private JButton buttonAgregarActividad;
     private JButton buttonAgregarTarea;
     private JTable tableTablero;
     private JButton buttonActualizarTablero;
-    private JComboBox comboBoxTest;
+    private JTextField textFieldFase;
+    private JTextField textFieldActividad;
+    private JComboBox comboBoxFase;
+    private JComboBox comboBoxActividad;
+    private JTextField textFieldTarea;
+
+    private DefaultTableModel tableModel;
 
     public TableroGUI() {
         flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
+
+
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -80,38 +90,31 @@ public class TableroGUI extends JDialog {
 
         buttonAgregarFase.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Fase fase = new Fase("ToDo", flujoDeTrabajo);
+                Fase fase = new Fase(textFieldFase.getText(), flujoDeTrabajo);
                 flujoDeTrabajo.getFases().add(fase);
-                JOptionPane.showMessageDialog(null,flujoDeTrabajo);
+                actualizarTablero();
+               // JOptionPane.showMessageDialog(null,flujoDeTrabajo);
             }
         });
         buttonAgregarActividad.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Actividad actividad = new Actividad("Historia de usuario 1", flujoDeTrabajo);
+                Actividad actividad = new Actividad(textFieldActividad.getText(), flujoDeTrabajo);
                 flujoDeTrabajo.getActividades().add(actividad);
-                JOptionPane.showMessageDialog(null,flujoDeTrabajo);
+                actualizarTablero();
+                // JOptionPane.showMessageDialog(null,flujoDeTrabajo);
             }
         });
         buttonAgregarTarea.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Actividad actividad = flujoDeTrabajo.getActividades().get(0);
-                Fase fase = flujoDeTrabajo.getFases().get(0);
+                Fase fase = flujoDeTrabajo.getFases().get(comboBoxFase.getSelectedIndex());
+                Actividad actividad = flujoDeTrabajo.getActividades().get(comboBoxActividad.getSelectedIndex());
 
-                Tarea tarea = new Tarea("Tarea 1", actividad, fase, flujoDeTrabajo);
-
+                Tarea tarea = new Tarea(textFieldTarea.getText(), actividad, fase, flujoDeTrabajo);
                 flujoDeTrabajo.getTareas().add(tarea);
                 actividad.getTareas().add(tarea);
                 fase.getTareas().add(tarea);
-                JOptionPane.showMessageDialog(null,flujoDeTrabajo);
-            }
-        });
-        buttonActualizarTablero.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                DefaultTableModel model = new DefaultTableModel();
-                for (int i = 0; i < flujoDeTrabajo.getFases().size(); i++) {
-                    comboBoxTest.addItem(flujoDeTrabajo.getFases().get(i).getNombre());
-                }
-                tableTablero = new JTable(model);
+                actualizarTablero();
+                // JOptionPane.showMessageDialog(null,flujoDeTrabajo);
             }
         });
     }
@@ -126,10 +129,29 @@ public class TableroGUI extends JDialog {
         dispose();
     }
 
+    private void actualizarTablero(){
+        comboBoxFase.removeAllItems();
+        for (int i = 0; i < flujoDeTrabajo.getFases().size(); i++) {
+            comboBoxFase.addItem(flujoDeTrabajo.getFases().get(i).getNombre());
+        }
+
+        comboBoxActividad.removeAllItems();
+        for (int j = 0; j < flujoDeTrabajo.getActividades().size(); j++) {
+            comboBoxActividad.addItem(flujoDeTrabajo.getActividades().get(j).getNombre());
+        }
+
+        tableModel = new DefaultTableModel();
+        tableTablero.setModel(tableModel);
+        for (int k = 0; k < flujoDeTrabajo.getFases().size(); k++) {
+            tableModel.addColumn(flujoDeTrabajo.getFases().get(k).getNombre(), flujoDeTrabajo.getFases().get(k).getTareas());
+        }
+    }
+
     public static void main(String[] args) {
         TableroGUI dialog = new TableroGUI();
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
     }
+
 }
