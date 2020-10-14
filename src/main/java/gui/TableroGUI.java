@@ -7,8 +7,6 @@ import flujodetrabajo.Tarea;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
 import java.awt.event.*;
 
 public class TableroGUI extends JDialog {
@@ -31,7 +29,7 @@ public class TableroGUI extends JDialog {
     private JComboBox comboBoxActividad;
     private JTextField textFieldTarea;
 
-    private DefaultTableModel tableModel;
+    private DefaultTableModel modelo;
 
     public TableroGUI() {
         flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
@@ -140,10 +138,11 @@ public class TableroGUI extends JDialog {
             comboBoxActividad.addItem(flujoDeTrabajo.getActividades().get(j).getNombre());
         }
 
-        tableModel = new DefaultTableModel();
-        tableTablero.setModel(tableModel);
+        modelo = new DefaultTableModel();
+        tableTablero.setModel(modelo);
+
         for (int k = 0; k < flujoDeTrabajo.getFases().size(); k++) {
-            tableModel.addColumn(flujoDeTrabajo.getFases().get(k).getNombre(), flujoDeTrabajo.getFases().get(k).getTareas());
+            modelo.addColumn(flujoDeTrabajo.getFases().get(k).getNombre(), flujoDeTrabajo.getFases().get(k).getTareas());
         }
     }
 
