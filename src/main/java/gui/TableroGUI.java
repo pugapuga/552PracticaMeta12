@@ -4,10 +4,12 @@ import flujodetrabajo.Actividad;
 import flujodetrabajo.Fase;
 import flujodetrabajo.FlujoDeTrabajo;
 import flujodetrabajo.Tarea;
+import paquete.Alumno;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
+import java.io.*;
 
 public class TableroGUI extends JDialog {
     private FlujoDeTrabajo flujoDeTrabajo;
@@ -28,6 +30,10 @@ public class TableroGUI extends JDialog {
     private JComboBox comboBoxFase;
     private JComboBox comboBoxActividad;
     private JTextField textFieldTarea;
+    private JButton buttonEjemplo1;
+    private JButton buttonEjemplo2;
+    private JButton buttonGrabar;
+    private JButton buttonRecuperar;
 
     private DefaultTableModel modelo;
 
@@ -113,6 +119,136 @@ public class TableroGUI extends JDialog {
                 fase.getTareas().add(tarea);
                 actualizarTablero();
                 // JOptionPane.showMessageDialog(null,flujoDeTrabajo);
+            }
+        });
+        buttonEjemplo1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream("flujodetrabajo.puga");
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                    //byte b = 00;
+                    //fileOutputStream.write(b);
+                    DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
+
+                    dataOutputStream.writeUTF("Hola mundo!");
+                    bufferedOutputStream.flush();
+
+                    dataOutputStream.close();
+                    bufferedOutputStream.close();
+                    fileOutputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+                
+                String s = null;
+                
+                try {
+                    FileInputStream fileInputStream = new FileInputStream("flujodetrabajo.puga");
+                    DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+                    
+                    s = dataInputStream.readUTF();
+                    
+                    dataInputStream.close();
+                    fileInputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                JOptionPane.showMessageDialog(null,s);
+            }
+        });
+        buttonEjemplo2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Alumno alumno = new Alumno("Pepito");
+
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream("flujodetrabajo.puga");
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                    //byte b = 00;
+                    //fileOutputStream.write(b);
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(bufferedOutputStream);
+
+                    objectOutputStream.writeObject(alumno);
+                    bufferedOutputStream.flush();
+
+                    objectOutputStream.close();
+                    bufferedOutputStream.close();
+                    fileOutputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+                Alumno a = null;
+
+                try {
+                    FileInputStream fileInputStream = new FileInputStream("flujodetrabajo.puga");
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+                    a = (Alumno) objectInputStream.readObject();
+
+                    objectInputStream.close();
+                    fileInputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (ClassNotFoundException classNotFoundException) {
+                    classNotFoundException.printStackTrace();
+                }
+
+                JOptionPane.showMessageDialog(null,a);
+
+            }
+        });
+        buttonGrabar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    FileOutputStream fileOutputStream = new FileOutputStream("flujodetrabajo.puga");
+                    BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+                    //byte b = 00;
+                    //fileOutputStream.write(b);
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(bufferedOutputStream);
+
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    bufferedOutputStream.flush();
+
+                    objectOutputStream.close();
+                    bufferedOutputStream.close();
+                    fileOutputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        buttonRecuperar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                try {
+                    FileInputStream fileInputStream = new FileInputStream("flujodetrabajo.puga");
+                    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+                    flujoDeTrabajo = (FlujoDeTrabajo) objectInputStream.readObject();
+
+                    objectInputStream.close();
+                    fileInputStream.close();
+                } catch (FileNotFoundException fileNotFoundException) {
+                    fileNotFoundException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (ClassNotFoundException classNotFoundException) {
+                    classNotFoundException.printStackTrace();
+                }
+
+                actualizarTablero();
+
             }
         });
     }
