@@ -1,12 +1,14 @@
 package servidor;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import flujodetrabajo.Fase;
+import flujodetrabajo.FlujoDeTrabajo;
+
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Servidor {
+    private FlujoDeTrabajo flujoDeTrabajo = null;
     private ServerSocket serverSocket = null;
     private Socket socket = null;
     private int PUERTO = 666;
@@ -18,6 +20,7 @@ public class Servidor {
 
     public void iniciar(){
         try {
+            this.flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
             //Creamos el socket del servidor
             serverSocket = new ServerSocket(PUERTO);
             System.out.println("Servidor iniciado");
@@ -31,22 +34,34 @@ public class Servidor {
 
                 System.out.println("Cliente conectado");
 
-                DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
-                String mensaje = dataInputStream.readUTF();
+                ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+                String mensaje = (String) objectInputStream.readObject();
                 System.out.println("El cliente envio el siguiente mensaje: " + mensaje);
 
-                DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-                String respuesta = "Te estamos esperando!";
-                dataOutputStream.writeUTF(respuesta);
-                System.out.println("El servidor respondio el siguiente mensaje: " + respuesta);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+
+                if(mensaje.contains("GET FLU")){
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    System.out.println("El servidor respondio el siguiente flujo de trabajo: " + flujoDeTrabajo);
+                } else if (mensaje.contains("ADD FAS")){
+                    this.flujoDeTrabajo.getFases().add(new Fase(mensaje.substring(8), this.flujoDeTrabajo));
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    System.out.println("El servidor agrego la fase: " + mensaje.substring(8));
+                } else {
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    System.out.println("El servidor respondio el siguiente flujo de trabajo: " + flujoDeTrabajo);
+                }
 
                 //Cierro el socket
+                objectOutputStream.close();
                 socket.close();
                 System.out.println("Cliente desconectado");
 
             }
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
