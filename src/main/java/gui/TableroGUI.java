@@ -14,6 +14,7 @@ import java.io.*;
 
 public class TableroGUI extends JDialog {
     private FlujoDeTrabajo flujoDeTrabajo;
+    private DefaultTableModel modelo;
     private JPanel contentPane;
     private JPanel panelPrincipal;
     private JPanel panelBotones;
@@ -36,7 +37,6 @@ public class TableroGUI extends JDialog {
     private JButton buttonGrabar;
     private JButton buttonRecuperar;
 
-    private DefaultTableModel modelo;
 
     public TableroGUI() {
         flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");

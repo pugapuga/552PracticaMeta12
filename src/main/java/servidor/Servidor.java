@@ -1,7 +1,9 @@
 package servidor;
 
+import flujodetrabajo.Actividad;
 import flujodetrabajo.Fase;
 import flujodetrabajo.FlujoDeTrabajo;
+import flujodetrabajo.Tarea;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -20,7 +22,7 @@ public class Servidor {
 
     public void iniciar(){
         try {
-            this.flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
+            flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
             //Creamos el socket del servidor
             serverSocket = new ServerSocket(PUERTO);
             System.out.println("Servidor iniciado");
@@ -44,9 +46,23 @@ public class Servidor {
                     objectOutputStream.writeObject(flujoDeTrabajo);
                     System.out.println("El servidor respondio el siguiente flujo de trabajo: " + flujoDeTrabajo);
                 } else if (mensaje.contains("ADD FAS")){
-                    this.flujoDeTrabajo.getFases().add(new Fase(mensaje.substring(8), this.flujoDeTrabajo));
+                    flujoDeTrabajo.getFases().add(new Fase(mensaje.substring(8), this.flujoDeTrabajo));
                     objectOutputStream.writeObject(flujoDeTrabajo);
                     System.out.println("El servidor agrego la fase: " + mensaje.substring(8));
+                } else if (mensaje.contains("ADD ACT")){
+                    flujoDeTrabajo.getActividades().add(new Actividad(mensaje.substring(8), this.flujoDeTrabajo));
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    System.out.println("El servidor agrego la actividad: " + mensaje.substring(8));
+                } else if (mensaje.contains("ADD TAR")){
+                    Actividad actividad = flujoDeTrabajo.getActividades().get(Integer.parseInt(mensaje.substring(8,9)));
+                    Fase fase = flujoDeTrabajo.getFases().get(Integer.parseInt(mensaje.substring(9,10)));
+                    String nombreTarea = mensaje.substring(10);
+                    Tarea tarea = new Tarea(nombreTarea, actividad, fase, flujoDeTrabajo);
+                    flujoDeTrabajo.getTareas().add(tarea);
+                    fase.getTareas().add(tarea);
+                    actividad.getTareas().add(tarea);
+                    objectOutputStream.writeObject(flujoDeTrabajo);
+                    System.out.println("El servidor agrego la actividad: " + mensaje.substring(8));
                 } else {
                     objectOutputStream.writeObject(flujoDeTrabajo);
                     System.out.println("El servidor respondio el siguiente flujo de trabajo: " + flujoDeTrabajo);
