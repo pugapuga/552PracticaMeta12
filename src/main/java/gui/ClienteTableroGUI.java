@@ -84,7 +84,8 @@ public class ClienteTableroGUI extends JDialog {
         buttonActualizarTablero.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualizarTablero();
+                HiloTablero hiloTablero = new HiloTablero(cliente,flujoDeTrabajo,tableTablero,comboBoxActividad,comboBoxFase);
+                hiloTablero.start();
             }
         });
     }
