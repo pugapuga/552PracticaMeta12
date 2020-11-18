@@ -1,16 +1,12 @@
 package servidor;
 
-import flujodetrabajo.Actividad;
-import flujodetrabajo.Fase;
 import flujodetrabajo.FlujoDeTrabajo;
-import flujodetrabajo.Tarea;
-import gui.HiloTablero;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Servidor {
+public class Servidor extends Thread {
     private FlujoDeTrabajo flujoDeTrabajo = null;
     private ServerSocket serverSocket = null;
     private Socket socket = null;
@@ -18,10 +14,18 @@ public class Servidor {
 
     public Servidor(int PUERTO) {
         this.PUERTO = PUERTO;
-        this.iniciar();
     }
 
-    public void iniciar(){
+    public FlujoDeTrabajo getFlujoDeTrabajo() {
+        return flujoDeTrabajo;
+    }
+
+    public void setFlujoDeTrabajo(FlujoDeTrabajo flujoDeTrabajo) {
+        this.flujoDeTrabajo = flujoDeTrabajo;
+    }
+
+    @Override
+    public void run() {
         try {
             flujoDeTrabajo = new FlujoDeTrabajo("Mi flujo de trabajo");
             //Creamos el socket del servidor
@@ -34,7 +38,7 @@ public class Servidor {
                 //Espero a que un cliente se conecte
                 System.out.println("Servidor esperando a que se conecte un cliente");
                 socket = serverSocket.accept();
-                HiloServidor hiloServidor = new HiloServidor(socket,flujoDeTrabajo);
+                HiloServidor hiloServidor = new HiloServidor(socket, flujoDeTrabajo);
                 hiloServidor.start();
             }
 

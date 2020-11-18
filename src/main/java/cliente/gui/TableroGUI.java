@@ -1,4 +1,4 @@
-package gui;
+package cliente.gui;
 
 import flujodetrabajo.Actividad;
 import flujodetrabajo.Fase;

@@ -1,4 +1,4 @@
-package gui;
+package cliente.gui;
 
 import cliente.Cliente;
 import flujodetrabajo.FlujoDeTrabajo;
