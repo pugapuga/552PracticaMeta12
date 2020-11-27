@@ -5,12 +5,14 @@ import flujodetrabajo.FlujoDeTrabajo;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.*;
 
 public class ClienteTableroGUI extends JDialog {
     private Cliente cliente;
     private FlujoDeTrabajo flujoDeTrabajo;
     private DefaultTableModel modelo;
+    private Component component;
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -24,6 +26,12 @@ public class ClienteTableroGUI extends JDialog {
     private JButton buttonTarea;
     private JTextField textFieldTarea;
     private JButton buttonActualizarTablero;
+    private JTabbedPane tabbedPane1;
+    private JPanel panelTabla;
+    private JPanel panelListas;
+    private JList listToDo;
+    private JList listInProgress;
+    private JList listDone;
 
     public ClienteTableroGUI() {
         cliente = new Cliente("localhost", 666);
@@ -86,6 +94,25 @@ public class ClienteTableroGUI extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 HiloTablero hiloTablero = new HiloTablero(cliente,flujoDeTrabajo,tableTablero,comboBoxActividad,comboBoxFase);
                 hiloTablero.start();
+            }
+        });
+        listInProgress.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                component = ((JList)e.getComponent());
+                System.out.println(component);
+            }
+        });
+        listInProgress.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+
+                listInProgress.remove(component);
+                listDone.add(component);
+
+                //System.out.println(name);
             }
         });
     }
